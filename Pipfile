@@ -9,7 +9,7 @@ autopep8 = "*"
 
 [packages]
 mutagen = "*"
-spotipy = {git = "https://github.com/plamere/spotipy.git"}
+spotipy = {git = "https://github.com/MrWhammy/spotipy.git",ref = "library-albums"}
 python-dotenv = "*"
 
 [requires]

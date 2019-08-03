@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7f88c38c63c29fc888d4d26b539ee0b396773edb669200fadd557da18815e0a7"
+            "sha256": "adf65bb56c7e9eace4ec2461847bcf09072351a63ea3e8e2eee14bb62772fd47"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,8 +32,8 @@
             "version": "==0.10.3"
         },
         "spotipy": {
-            "git": "https://github.com/plamere/spotipy.git",
-            "ref": "4c2c1d763a3653aa225c4af848409ec31286a6bf"
+            "git": "https://github.com/MrWhammy/spotipy.git",
+            "ref": "966bcaadd6384de21b896616c119537f5a302977"
         }
     },
     "develop": {

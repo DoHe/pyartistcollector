@@ -16,6 +16,11 @@ MUSIC_EXTS = [
 ]
 
 
+def chunkify(iterable, chunk_size):
+    for i in range(0, len(iterable), chunk_size):
+        yield iterable[i:i+chunk_size]
+
+
 def get_artists(path):
     try:
         id3 = EasyID3(path)
@@ -41,12 +46,6 @@ def collect_artists(dirs):
     return all_artists
 
 
-def upload_artists(artists):
-    token = prompt_for_user_token("dohe", scope="user-follow-modify")
-    spotify_client = Spotify(auth=token)
-    spotify_client.user_follow_artists(ids=[])
-
-
 def existing_dir(path):
     if not os.path.exists(path):
         raise argparse.ArgumentTypeError(
@@ -54,16 +53,44 @@ def existing_dir(path):
     return path
 
 
+class SpotifyClient:
+
+    def __init__(self):
+        token = prompt_for_user_token("dohe", scope="user-follow-modify user-library-modify")
+        self.spotify_client = Spotify(auth=token)
+
+    def upload_artists(self, artists):
+        for artist in artists:
+            self.add_to_libraray(artist)
+
+    def add_to_libraray(self, artist):
+        spotify_artists = self.spotify_client.search(artist, type="artist").get('artists', {}).get('items')
+        if not spotify_artists:
+            return
+        artist_id = spotify_artists[0].get("id")
+        self.spotify_client.user_follow_artists(ids=[artist_id])
+        albums = self.spotify_client.artist_albums(artist_id, limit=50).get('items')
+        album_ids = set()
+        for album in albums:
+            if album.get('album_type') != 'album':
+                continue
+            album_ids.add(album.get('id'))
+        if album_ids:
+            for chunk in chunkify(list(album_ids), 5):
+                self.spotify_client.current_user_saved_albums_add(albums=chunk)
+            print("Added {} albums for {}".format(len(album_ids), artist.title()))
+        else:
+            print("No albums for", artist)
+
+
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description='Collect local mp3 tags and add to Spotify library')
+    parser = argparse.ArgumentParser(description='Collect local mp3 tags and add to Spotify library')
     parser.add_argument('dirs', metavar='dirst', type=existing_dir, nargs="+",
                         help='Directories to search.')
-
     args = parser.parse_args()
-    # artists = collect_artists(args.dirs)
-    artists = ["finger eleven"]
+    artists = collect_artists(args.dirs)
     print(("Found {} artists".format(len(artists))))
-    upload_artists(artists)
+    c = SpotifyClient()
+    c.upload_artists(artists)

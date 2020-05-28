@@ -66,7 +66,7 @@ def existing_dir(path):
 class SpotifyClient:
 
     def __init__(self):
-        token = prompt_for_user_token("dohe", scope="user-follow-modify user-library-modify")
+        token = prompt_for_user_token("dohe", scope="user-library-read user-follow-modify user-library-modify")
         self.spotify_client = Spotify(auth=token)
 
     def upload_artists(self, artists):

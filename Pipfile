@@ -6,11 +6,12 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 autopep8 = "*"
+mypy = "*"
 
 [packages]
 mutagen = "*"
-spotipy = {git = "https://github.com/MrWhammy/spotipy.git",ref = "library-albums"}
+spotipy = "*"
 python-dotenv = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3"

@@ -1,5 +1,8 @@
 # PyArtistcollector
 
+Copy [.env.template](.env.template) to `.env` and provide credentials.
+Run with:
+
 ```bash
-SPOTIPY_CLIENT_SECRET=XXX SPOTIPY_CLIENT_ID=YYY SPOTIPY_REDIRECT_URI=http://127.0.0.1:9876/ pipenv run python collect.py ~/Music
+pipenv run python collect.py -u YOUR_USER ~/Music
 ```
